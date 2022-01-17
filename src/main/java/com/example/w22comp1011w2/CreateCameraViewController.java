@@ -33,22 +33,31 @@ public class CreateCameraViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        msgLabel.setVisible(false);
+        msgLabel.setText("");
         brandComboBox.getItems().addAll(Camera.getManufacturers());
     }
 
     @FXML
     private void createCamera()
     {
+
         String make = brandComboBox.getSelectionModel().getSelectedItem();
         String model = modelTextField.getText();
-        int res = Integer.parseInt(resolutionTextField.getText());
         boolean slr = slrCheckBox.isSelected();
-        double price = Double.parseDouble(priceTextField.getText());
-
-        Camera newCamera = new Camera(make, model, res, slr, price);
-
-        msgLabel.setVisible(true);
-        msgLabel.setText(newCamera.toString());
+        int res = -1;
+        double price = -1;
+        try {
+            res = Integer.parseInt(resolutionTextField.getText());
+            price = Double.parseDouble(priceTextField.getText());
+        }
+        catch (Exception e)
+        {
+            msgLabel.setText("Resolution & price must be numbers only");
+        }
+        if (res != -1 && price != -1)
+        {
+            Camera newCamera = new Camera(make, model, res, slr, price);
+            msgLabel.setText(newCamera.toString());
+        }
     }
 }
